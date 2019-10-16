@@ -10,13 +10,13 @@ namespace MultiQueueModels
     {
         public SimSystem()
         {
-            simulationQueue = new Queue<SimulationCase>();
+            simulationQueue = new Queue<int>();
             this.priorityID = -1;
             SetServersTimeTable();
             SetUsersTimeTable();
             setData();
         }
-        Queue<SimulationCase> simulationQueue { get; set; }
+        Queue<int> simulationQueue { get; set; }
         int priorityID { get; set; }
 
         Random rnd = new Random();
@@ -72,21 +72,22 @@ namespace MultiQueueModels
                 AddUser();
                 if (simulationQueue.Count > 0)
                 {
-                    SimulationCase simulation = simulationQueue.Peek();
-                    int ServerIndex = SelectServer(simulation.ArrivalTime);
+                    int simulationIndex = simulationQueue.Peek();
+                    int ServerIndex = SelectServer(SimulationTable[simulationIndex].ArrivalTime);
                     if (ServerIndex == -1)
                         continue;
-                    simulationQueue.Dequeue();
-                    if (Servers[ServerIndex].FinishTime >= simulation.InterArrival)
-                        simulation.StartTime = Servers[ServerIndex].FinishTime;//F / I
-                    else
-                        simulation.StartTime = simulation.InterArrival;//F / I
-                    simulation.ServiceTime = getTime(Servers[ServerIndex].TimeDistribution, simulation.RandomService); //G /J
-                    simulation.EndTime = simulation.ServiceTime + simulation.StartTime;//H / K
-                    Servers[ServerIndex].FinishTime = simulation.EndTime = simulation.ServiceTime + simulation.StartTime;
 
-                    SimulationTable[simulation.CustomerNumber - 1] = simulation;
-                    
+                    simulationQueue.Dequeue();
+
+                    if (Servers[ServerIndex].FinishTime >= SimulationTable[simulationIndex].InterArrival)
+                        SimulationTable[simulationIndex].StartTime = Servers[ServerIndex].FinishTime;//F / I
+                    else
+                        SimulationTable[simulationIndex].StartTime = SimulationTable[simulationIndex].InterArrival;//F / I
+
+                    SimulationTable[simulationIndex].ServiceTime = getTime(Servers[ServerIndex].TimeDistribution, SimulationTable[simulationIndex].RandomService); //G /J
+                    SimulationTable[simulationIndex].EndTime = SimulationTable[simulationIndex].ServiceTime + SimulationTable[simulationIndex].StartTime;//H / K
+                    Servers[ServerIndex].FinishTime = SimulationTable[simulationIndex].EndTime;
+        
                 }
             }
         }
@@ -100,7 +101,7 @@ namespace MultiQueueModels
             if (tmp.CustomerNumber == 1)
             {
                 tmp.RandomInterArrival = 1;//B
-                tmp.InterArrival = 0;//C
+                tmp.InterArrival = 0;//C    
                 tmp.ArrivalTime = 0;//D
             }
             else
@@ -110,7 +111,7 @@ namespace MultiQueueModels
                 tmp.ArrivalTime = SimulationTable[SimulationTable.Count - 1].ArrivalTime + tmp.InterArrival; //D
             }
             tmp.RandomService = rnd.Next(100) + 1;//E
-            simulationQueue.Enqueue(tmp);
+            simulationQueue.Enqueue(tmp.CustomerNumber-1);
             SimulationTable.Add(tmp);
         }
         void setData()
