@@ -87,7 +87,8 @@ namespace MultiQueueModels
                     SimulationTable[simulationIndex].ServiceTime = getTime(Servers[ServerIndex].TimeDistribution, SimulationTable[simulationIndex].RandomService); //G /J
                     SimulationTable[simulationIndex].EndTime = SimulationTable[simulationIndex].ServiceTime + SimulationTable[simulationIndex].StartTime;//H / K
                     Servers[ServerIndex].FinishTime = SimulationTable[simulationIndex].EndTime;
-        
+
+                    SimulationTable[simulationIndex].TimeInQueue = SimulationTable[simulationIndex].StartTime - SimulationTable[simulationIndex].ArrivalTime;
                 }
             }
         }
