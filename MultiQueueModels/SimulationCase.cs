@@ -21,6 +21,8 @@ namespace MultiQueueModels
         public int RandomService { get; set; }//E
         public int ServiceTime { get; set; } // G / J
         public Server AssignedServer { get; set; }  //choose between G / j
+        public int AssignedServerIndex { get; set; }  //choose between G / j
+    
         public int StartTime { get; set; } // F / I
         public int EndTime { get; set; }//H / K
         public int TimeInQueue { get; set; } // L

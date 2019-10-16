@@ -87,8 +87,9 @@ namespace MultiQueueModels
                     int ServerIndex = SelectServer(SimulationTable[simulationIndex].ArrivalTime);
 
                     SimulationTable[simulationIndex].AssignedServer = Servers[ServerIndex];
+                    SimulationTable[simulationIndex].AssignedServerIndex = ServerIndex;
 
-                    if (Servers[ServerIndex].FinishTime >= SimulationTable[simulationIndex].InterArrival)
+                    if (Servers[ServerIndex].FinishTime >= SimulationTable[simulationIndex].ArrivalTime)
                         SimulationTable[simulationIndex].StartTime = Servers[ServerIndex].FinishTime;//F / I
                     else
                         SimulationTable[simulationIndex].StartTime = SimulationTable[simulationIndex].ArrivalTime;//F / I
