@@ -78,11 +78,12 @@ namespace MultiQueueModels
                         continue;
 
                     simulationQueue.Dequeue();
+                    SimulationTable[simulationIndex].AssignedServer = Servers[ServerIndex];
 
                     if (Servers[ServerIndex].FinishTime >= SimulationTable[simulationIndex].InterArrival)
                         SimulationTable[simulationIndex].StartTime = Servers[ServerIndex].FinishTime;//F / I
                     else
-                        SimulationTable[simulationIndex].StartTime = SimulationTable[simulationIndex].InterArrival;//F / I
+                        SimulationTable[simulationIndex].StartTime = SimulationTable[simulationIndex].ArrivalTime;//F / I
 
                     SimulationTable[simulationIndex].ServiceTime = getTime(Servers[ServerIndex].TimeDistribution, SimulationTable[simulationIndex].RandomService); //G /J
                     SimulationTable[simulationIndex].EndTime = SimulationTable[simulationIndex].ServiceTime + SimulationTable[simulationIndex].StartTime;//H / K
