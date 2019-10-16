@@ -19,7 +19,7 @@ namespace MultiQueueModels
         public int InterArrival { get; set; }//C  prob. in range (interarrival Distribution of calls)
         public int ArrivalTime { get; set; } //D Service Start Time
         public int RandomService { get; set; }//E
-        public int ServiceTime { get; set; } // G / J
+        public int ServiceTime   { get; set; } // G / J
         public Server AssignedServer { get; set; }  //choose between G / j
         public int AssignedServerIndex { get; set; }  //choose between G / j
     
