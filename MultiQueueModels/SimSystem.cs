@@ -39,13 +39,24 @@ namespace MultiQueueModels
                     }
                 }
             // else if (SelectionMethod == Enums.SelectionMethod.Random
+            int minimumIndex=-1;
+            int minimumValue=-1;
             for (int i = 0; i < Servers.Count; i++)
             {
+                if (i == 0) {
+                    minimumIndex = i;
+                    minimumValue = Servers[i].FinishTime;
+                }
+
+                if (minimumValue > Servers[i].FinishTime)
+                    minimumIndex = i;
                 if (Servers[i].FinishTime <= time)
                     serverList.Add(i);
             }
             if (serverList.Count == 0)
-                return -1;
+            {
+                return minimumIndex;
+            }
             int index = new Random().Next(serverList.Count);
             return serverList[index];
         }
@@ -72,12 +83,9 @@ namespace MultiQueueModels
                 AddUser();
                 if (simulationQueue.Count > 0)
                 {
-                    int simulationIndex = simulationQueue.Peek();
+                    int simulationIndex = simulationQueue.Dequeue();
                     int ServerIndex = SelectServer(SimulationTable[simulationIndex].ArrivalTime);
-                    if (ServerIndex == -1)
-                        continue;
 
-                    simulationQueue.Dequeue();
                     SimulationTable[simulationIndex].AssignedServer = Servers[ServerIndex];
 
                     if (Servers[ServerIndex].FinishTime >= SimulationTable[simulationIndex].InterArrival)
